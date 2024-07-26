@@ -1,5 +1,6 @@
 import socket
 import threading
+import time
 
 from constants import *
 
@@ -141,6 +142,7 @@ class Server():
                     print("[DEBUG] Game is running.")
 
             elif self.state == ServerState.GAME_RUNNING:
+                time.sleep(1 / 31)
                 if len(self.players) < 2:
                     for player in self.players:
                         self.send_message(f"{WIN}:{player.name}", player)
