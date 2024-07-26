@@ -1,3 +1,4 @@
 .mypy_cache
 kinect-pong
 .task
+__pycache__

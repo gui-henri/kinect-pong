@@ -1,4 +1,4 @@
-from pyray import draw_circle
+from pyray import draw_circle, get_mouse_position
 import statistics
 from pyray import WHITE, GREEN
 
@@ -16,6 +16,11 @@ class Landmarks(Entity):
         self.values_y: list[float] = []
     
     def update(self) -> None:
+        if not self.webcam.is_opened:
+            pos = get_mouse_position()
+            self.hand_x = pos.x
+            self.hand_y = pos.y
+            return
         img = self.webcam.read()
         self.hand = self.model.process(img)
         if not len(self.hand.hand_landmarks) > 0:
@@ -33,6 +38,10 @@ class Landmarks(Entity):
         return (self.hand_x, self.hand_y)
 
     def draw(self) -> None:
+        if not self.webcam.is_opened:
+            draw_circle(self.hand_x, self.hand_y, 5, GREEN)
+            return
+        
         if not len(self.hand.hand_landmarks) > 0:
             return
         for landmark in self.hand.hand_landmarks[0].landmark:

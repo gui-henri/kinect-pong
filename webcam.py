@@ -6,9 +6,9 @@ class WebCam:
     def __init__(self, webcam_index: int = 0) -> None:
         cv2.setLogLevel(0)
         self.cap = cv2.VideoCapture(webcam_index)
-        if not self.cap.isOpened():
+        self.is_opened = self.cap.isOpened()
+        if not self.is_opened:
             print("Error: Could not open webcam.")
-            sys.exit(1)
 
     def read(self) -> MatLike:
         ret, frame = self.cap.read()

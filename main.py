@@ -6,8 +6,10 @@ from scene import SceneManager
 from scenes.game import GameScene
 from webcam import WebCam
 from scenes.connect import ReadyScene
+import os
 
 def main() -> None:
+    os.environ["GLOG_minloglevel"] ="3"
     set_trace_log_level(0)
     webcam = WebCam()
     model = HandRecognizer()
