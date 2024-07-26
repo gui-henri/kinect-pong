@@ -113,7 +113,8 @@ class Server():
                 if command == PLAYER_NAME and value != "":
                     assert len(self.players) < 2, "Max players reached."
                     player = Player(value, conn, addr, id=len(self.players) + 1)
-                    self.players.append(player)
+                    self.add_player(player)
+
                     print(f"[NEW PLAYER] {player.name} connected.")
                     thread = threading.Thread(target=self.handle_client, args=(player,))
                     thread.start()
@@ -130,7 +131,6 @@ class Server():
                     continue
                 
             elif self.state == ServerState.WAITING_READY:
-                print("[DEBUG] Game is waiting for players to be ready.")
                 if len(self.players) < 2:
                     self.state = ServerState.WAITING_PLAYERS
                     print("[DEBUG] Game is waiting for more players.")
@@ -147,16 +147,12 @@ class Server():
                     self.state = ServerState.GAME_END
                     print("[DEBUG] Game ended by withdrawal.")
                     continue
-                self.ball.update(self.players)
+                self.ball.update()
                 last_score = self.ball.last_scoring_player()
                 if last_score:
                     last_score.score += 1
                     if last_score.score == MAX_SCORE:
-                        for player in self.players:
-                            if player != last_score:
-                                self.send_message(f"{LOSE}:{player.name}", player)
-                            else:
-                                self.send_message(f"{WIN}:{player.name}", player)
+                        self.broadcast(f"{WIN}:{last_score.name}")
                         self.state = ServerState.GAME_END
                         print("[DEBUG] Game ended by score. Winner: ", last_score.name)
                         continue
@@ -171,11 +167,22 @@ class Server():
                     player.is_connected = False
                 self.state = ServerState.WAITING_PLAYERS
 
+    def add_player(self, player: Player):
+        self.players.append(player)
+        self.ball.players.append(player)
+    
+    def remove_player(self, player: Player):
+        try:
+            self.players.remove(player)
+            self.ball.players.remove(player)
+        except ValueError:
+            print(f"[ERROR] {player.name} is not in the game. Check for errors when removing players from player list.")
+
     def handle_client(self, player: Player):
         while player.is_connected:
             command, value = self.recieve_message(player.conn)
-            if command == DISCONNECT_MESSAGE:
-                self.players.remove(player)
+            if command == DISCONNECT_MESSAGE or command == FORCE_CLOSED:
+                self.remove_player(player)
                 print(f"[DISCONNECT] {player.addr} disconnected.")
                 break
             elif command == READY_MESSAGE:
@@ -205,6 +212,9 @@ class Server():
         except ConnectionAbortedError:
             print(f"[ERROR] error receiving data from {conn}. It may have disconnected.")
             return (NONE_MESSAGE, "")
+        except ConnectionResetError:
+            print(f"[ERROR] connection {conn} was forcefully closed by the client.")
+            return (FORCE_CLOSED, "")
 
     def send_message(self, msg: str, player: Player):
         message = msg.encode(self.FORMAT)
@@ -216,6 +226,8 @@ class Server():
             player.conn.send(message)
         except ConnectionAbortedError:
             print(f"[ERROR] error sending data to {player.name}. It may have disconnected.")
+        except ConnectionResetError:
+            print(f"[ERROR] connection was forcefully closed by the client.")
     
     def broadcast(self, msg: str):
         for player in self.players:

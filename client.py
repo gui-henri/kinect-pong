@@ -13,7 +13,6 @@ class Client:
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((addr, port))
         self.send(f"{PLAYER_NAME}:{name}")
-        self.client.setblocking(False)
         self.messages: list[str] = []
         self.connected = True
         self.rcv = threading.Thread(target=self.handle_recieve)
@@ -40,6 +39,9 @@ class Client:
         except ConnectionAbortedError:
             self.connected = False
             print("Connection aborted in exceptional way")
+        except ConnectionResetError:
+            self.connected = False
+            print("Connection was forcefully closed by the server or the client")
 
     def recieve(self):
         try:
