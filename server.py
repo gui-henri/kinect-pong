@@ -132,6 +132,7 @@ class Server():
                     continue
                 
             elif self.state == ServerState.WAITING_READY:
+                time.sleep(0.2)
                 if len(self.players) < 2:
                     self.state = ServerState.WAITING_PLAYERS
                     print("[DEBUG] Game is waiting for more players.")
