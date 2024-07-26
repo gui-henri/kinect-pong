@@ -142,7 +142,8 @@ class Server():
                     print("[DEBUG] Game is running.")
 
             elif self.state == ServerState.GAME_RUNNING:
-                time.sleep(1 / 31)
+                fps = 30
+                then = time.time() * 1000
                 if len(self.players) < 2:
                     for player in self.players:
                         self.send_message(f"{WIN}:{player.name}", player)
@@ -168,6 +169,11 @@ class Server():
                 for player in self.players:
                     player.is_connected = False
                 self.state = ServerState.WAITING_PLAYERS
+
+            now = time.time() * 1000
+            sleep_time = 1 / fps - (now - then)
+            if sleep_time > 0:
+                time.sleep(sleep_time)
 
     def add_player(self, player: Player):
         self.players.append(player)
