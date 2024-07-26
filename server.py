@@ -163,17 +163,16 @@ class Server():
                 self.broadcast(f"{BALL}:{self.ball.x},{self.ball.y},{self.ball.dx},{self.ball.dy}")
                 for player in self.players:
                     self.broadcast(f"{player.name}:{player.y}")
+                now = time.time() * 1000
+                sleep_time = 1 / fps - (now - then)
+                if sleep_time > 0:
+                    time.sleep(sleep_time)
 
             elif self.state == ServerState.GAME_END:
                 print("[DEBUG] Game ended. Disconnecting players and starting over.")
                 for player in self.players:
                     player.is_connected = False
                 self.state = ServerState.WAITING_PLAYERS
-
-            now = time.time() * 1000
-            sleep_time = 1 / fps - (now - then)
-            if sleep_time > 0:
-                time.sleep(sleep_time)
 
     def add_player(self, player: Player):
         self.players.append(player)
