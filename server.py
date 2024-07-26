@@ -201,10 +201,7 @@ class Server():
 
     def recieve_message(self, conn: socket) -> tuple[str, str]:
         try:
-            msg_lenght = conn.recv(self.HEADER).decode(self.FORMAT)
-            if not msg_lenght:
-                return (NONE_MESSAGE, "")
-            msg = conn.recv(int(msg_lenght)).decode(self.FORMAT)
+            msg = conn.recv(self.HEADER).decode(self.FORMAT)
             msg = msg.split(':')
             if len(msg) == 1:
                 return (msg[0], "")
@@ -218,11 +215,7 @@ class Server():
 
     def send_message(self, msg: str, player: Player):
         message = msg.encode(self.FORMAT)
-        msg_lenght = len(message)
-        send_lenght = str(msg_lenght).encode(self.FORMAT)
-        send_lenght += b" " * (self.HEADER - len(send_lenght))
         try:
-            player.conn.send(send_lenght)
             player.conn.send(message)
         except ConnectionAbortedError:
             print(f"[ERROR] error sending data to {player.name}. It may have disconnected.")

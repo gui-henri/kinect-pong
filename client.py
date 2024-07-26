@@ -30,11 +30,8 @@ class Client:
 
     def send(self, msg: str):
         message = msg.encode(FORMAT)
-        msg_lenght = len(message)
-        send_lenght = str(msg_lenght).encode(FORMAT)
-        send_lenght += b" " * (HEADER - len(send_lenght))
+        print(f"[SENDING] '{message}'")
         try:
-            self.client.send(send_lenght)
             self.client.send(message)
         except ConnectionAbortedError:
             self.connected = False
@@ -45,11 +42,14 @@ class Client:
 
     def recieve(self):
         try:
-            msg_lenght = self.client.recv(HEADER).decode(FORMAT)
-            if msg_lenght:
-                msg_lenght = int(msg_lenght)
-                msg = self.client.recv(msg_lenght).decode(FORMAT)
-                return msg
+            msg = self.client.recv(HEADER).decode(FORMAT)
+            if not msg:
+                return (NONE_MESSAGE, "")
+    
+            msg = msg.split(':')
+            if len(msg) == 1:
+                return (msg[0], "")
+            return (msg[0], msg[1])
         except ConnectionAbortedError:
             self.connected = False
             print("Connection aborted in exceptional way")
