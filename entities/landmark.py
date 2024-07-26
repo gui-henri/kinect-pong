@@ -18,8 +18,8 @@ class Landmarks(Entity):
     def update(self) -> None:
         if not self.webcam.is_opened:
             pos = get_mouse_position()
-            self.hand_x = pos.x
-            self.hand_y = pos.y
+            self.hand_x = int(pos.x)
+            self.hand_y = int(pos.y)
             return
         img = self.webcam.read()
         self.hand = self.model.process(img)
