@@ -16,7 +16,7 @@ class Game(Entity):
         self.p2_score = 0
 
     def update(self) -> None:
-        self.proccess_messages()
+        self.proccess_messages(self.client.messages)
     
     def proccess_messages(self, messages: list[tuple[Literal['!none'], Literal['']] | tuple[str, Literal['']] | tuple[str, str] | None]):
         msgs = messages.copy()
@@ -47,6 +47,7 @@ class Game(Entity):
                     self.scene.manager.change_scene("win")
                 else:
                     self.scene.manager.change_scene("lose")
+                messages.remove(msg)
     def draw(self) -> None:
         p1_pos = int(get_screen_width() / 2 - len(self.player_name) * 10)
         p2_pos = int(get_screen_width() / 2 + len(self.enemy_name) * 10)
