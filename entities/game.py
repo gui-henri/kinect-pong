@@ -49,11 +49,11 @@ class Game(Entity):
                     self.scene.manager.change_scene("lose")
                 messages.remove(msg)
     def draw(self) -> None:
-        p1_pos = int(get_screen_width() / 2 - len(self.player_name) * 10)
-        p2_pos = int(get_screen_width() / 2 + len(self.enemy_name) * 10)
+        p1_pos = int((get_screen_width() / 4) + len(self.player_name) * 10)
+        p2_pos = int((get_screen_width() / 4) * 3 - len(self.enemy_name) * 10)
         if self.client.id == 1:
             draw_text(f"{self.player_name}: {self.p1_score}", p1_pos, 70, 30, WHITE)
             draw_text(f"{self.enemy_name}: {self.p2_score}", p2_pos, 70, 30, WHITE)
         else:
-            draw_text(f"{self.enemy_name}: {self.p2_score}", p1_pos, 70, 30, WHITE)
-            draw_text(f"{self.player_name}: {self.p1_score}", p2_pos, 70, 30, WHITE)
+            draw_text(f"{self.enemy_name}: {self.p1_score}", p1_pos, 70, 30, WHITE)
+            draw_text(f"{self.player_name}: {self.p2_score}", p2_pos, 70, 30, WHITE)
