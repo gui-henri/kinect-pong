@@ -203,7 +203,7 @@ class Server():
                 player.ready = True
                 print(f"[READY] {player.name} is ready.")
             elif command == Y_POSITION:
-                player.y = int(value)
+                player.y = int(float(value))
             elif command == NONE_MESSAGE:    
                 continue
             else:

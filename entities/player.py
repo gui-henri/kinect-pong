@@ -55,7 +55,7 @@ class Player(Entity):
         
         for msg in msgs:
             if msg[0] == NONE_MESSAGE:
-                messages.remove(msg)                    
+                messages.remove(msg)
             else:
                 continue 
 
@@ -75,7 +75,7 @@ class Oponent(Player):
                 name, id, y = value.split(',')
                 if id != self.client.id:
                     self.name = name
-                    self.rectangle.y = y
+                    self.rectangle.y = int(y)
                 messages.remove(msg)
             else:
                 continue
