@@ -11,8 +11,17 @@ FORMAT = "utf-8"
 class Client:
     def __init__(self, addr: str, port: int, name: str) -> None:
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client.connect((addr, port))
-        self.send(f"{PLAYER_NAME}:{name}")
+        self.addr = (addr, port)
+        self.name = name
+        try:
+            self.connect()
+        except:
+            print("[ERROR] Unable to connect to game server. Please check the address or your internet connection.")
+            quit()
+    
+    def connect(self):
+        self.client.connect(self.addr)
+        self.send(f"{PLAYER_NAME}:{self.name}")
         command, value = self.recieve()
         if command == ID:
             self.id = int(value)
@@ -23,7 +32,7 @@ class Client:
         self.connected = True
         self.rcv = threading.Thread(target=self.handle_recieve)
         self.rcv.start()
-    
+
     def handle_recieve(self):
         while self.connected:
             ready_to_read, _, _ = select.select([self.client], [], [], 3)

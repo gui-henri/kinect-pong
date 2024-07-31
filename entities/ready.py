@@ -49,6 +49,6 @@ class ReadyText(Entity):
         self.client.messages = msgs[l:]
 
     def draw(self) -> None:
-        draw_text(self.text, int(get_screen_width() / 2 - len(self.text) * 10), 40, 20, WHITE)
+        draw_text(self.text, int(get_screen_width() / 2 - len(self.text) * 5), 40, 20, WHITE)
         if not self.ready:
             draw_circle(int(self.sphere.x), int(self.sphere.y), self.radius, WHITE)

@@ -3,6 +3,7 @@ from client import Client
 from gesture_recognizer import HandRecognizer
 from raylib_app import RayLibApp
 from scene import SceneManager
+from scenes.end import WinScene, LoseScene
 from scenes.game import GameScene
 from webcam import WebCam
 from scenes.connect import ReadyScene
@@ -31,9 +32,13 @@ def main() -> None:
 
     ready_scene = ReadyScene(name, client, model, webcam)
     game_scene = GameScene(client, model, webcam, name)
+    win_scene = WinScene(name, client)
+    lose_scene = LoseScene(name, client)
     
     scene_manager.add_scene(ready_scene)
     scene_manager.add_scene(game_scene)
+    scene_manager.add_scene(win_scene)
+    scene_manager.add_scene(lose_scene)
 
     app = RayLibApp(1280, 720, "Kinect Pong", 30, scene_manager)
 
