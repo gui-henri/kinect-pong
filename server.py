@@ -90,7 +90,7 @@ class Ball():
 
 class Server():
     def __init__(self):
-        self.HEADER = 1024
+        self.HEADER = 128
         self.PORT = 4321
         self.HOST = socket.gethostbyname(socket.gethostname())
         self.ADDR = (self.HOST, self.PORT)
@@ -228,7 +228,10 @@ class Server():
             return (FORCE_CLOSED, "")
 
     def send_message(self, msg: str, player: Player):
-        message = msg.encode(self.FORMAT)
+        message_bytes = msg.encode(self.FORMAT)
+        padd_bytes = ' '.encode(self.FORMAT)
+        message = message_bytes + padd_bytes * (self.HEADER - len(message_bytes))
+        assert len(message) == 128, "message is not 128 bytes long"
         try:
             player.conn.send(message)
         except ConnectionAbortedError:

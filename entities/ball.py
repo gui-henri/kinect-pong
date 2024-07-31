@@ -22,7 +22,7 @@ class Ball(Entity):
         self.proccess_messages(self.client.messages)
 
     def draw(self) -> None:
-        draw_circle(int(self.x), int(self.y), self.radius, self.color)
+        draw_circle(int(float(self.x)), int(float(self.y)), self.radius, self.color)
     
     def proccess_messages(self, messages: list[tuple[Literal['!none'], Literal['']] | tuple[str, Literal['']] | tuple[str, str] | None]):
         msgs = messages.copy()

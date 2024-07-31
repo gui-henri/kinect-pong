@@ -5,7 +5,7 @@ import time
 
 from constants import *
 
-HEADER = 1024
+HEADER = 128
 FORMAT = "utf-8"
 
 class Client:
@@ -30,6 +30,7 @@ class Client:
             if ready_to_read:
                 for socket in ready_to_read:
                     msg = self.recieve(socket=socket)
+                    print(f'[RECIEVING] {msg}')
                     if msg:
                         self.messages.append(msg)
         print("Connection closed")
