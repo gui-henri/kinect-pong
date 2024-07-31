@@ -37,7 +37,10 @@ class Client:
         self.send(DISCONNECT_MESSAGE)
 
     def send(self, msg: str):
-        message = msg.encode(FORMAT)
+        message_bytes = msg.encode(self.FORMAT)
+        padd_bytes = ' '.encode(self.FORMAT)
+        message = message_bytes + padd_bytes * (self.HEADER - len(message_bytes))
+        assert len(message) == 128, "message is not 128 bytes long"
         print(f"[SENDING] '{message}'")
         try:
             self.client.send(message)
@@ -51,7 +54,7 @@ class Client:
     def recieve(self, socket=None):
         try:
             if socket != None:
-                msg = socket.recv(HEADER).decode(FORMAT)
+                msg = socket.recv(HEADER).decode(FORMAT).rstrip()
                 if not msg:
                     return (NONE_MESSAGE, "")
         
@@ -60,7 +63,7 @@ class Client:
                     return (msg[0], "")
                 return (msg[0], msg[1])
             else:
-                msg = self.client.recv(HEADER).decode(FORMAT)
+                msg = self.client.recv(HEADER).decode(FORMAT).rstrip()
                 if not msg:
                     return (NONE_MESSAGE, "")
         

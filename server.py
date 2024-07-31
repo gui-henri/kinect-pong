@@ -215,7 +215,7 @@ class Server():
 
     def recieve_message(self, conn: socket) -> tuple[str, str]:
         try:
-            msg = conn.recv(self.HEADER).decode(self.FORMAT)
+            msg = conn.recv(self.HEADER).decode(self.FORMAT).rstrip()
             msg = msg.split(':')
             if len(msg) == 1:
                 return (msg[0], "")
