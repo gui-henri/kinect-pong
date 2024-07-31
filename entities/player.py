@@ -2,7 +2,7 @@ from typing import Literal
 from pyray import draw_rectangle_rec
 from pyray import get_screen_height
 from pyray import Color, Rectangle
-from pyray import WHITE
+from pyray import WHITE, RED
 
 from client import Client
 from constants import *
@@ -11,7 +11,10 @@ from entity import Entity
 class Player(Entity):
     def __init__(self, client: Client, width: int, height: int, color: Color = WHITE, speed: int = 1, name="unknown") -> None:
         self.client = client
-        self.rectangle = Rectangle(FIRST_PLAYER_X if self.client.id == 1 else SECOND_PLAYER_X, 500, width, height)
+        pos = FIRST_PLAYER_X
+        if self.client.id == 2:
+            pos = SECOND_PLAYER_X
+        self.rectangle = Rectangle(pos, 500, width, height)
         self.speed = speed
         self.color = color
         self.last_y = 0
@@ -60,9 +63,12 @@ class Player(Entity):
                 continue 
 
 class Oponent(Player):
-    def __init__(self, client: Client, width: int, height: int, color: Color = WHITE, speed: int = 1, name="unknown") -> None:
+    def __init__(self, client: Client, width: int, height: int, color: Color = RED, speed: int = 1, name="unknown") -> None:
         super().__init__(client, width, height, color, speed, name)
-        self.rectangle = Rectangle(SECOND_PLAYER_X if self.client.id == 1 else FIRST_PLAYER_X, 500, width, height)
+        pos = SECOND_PLAYER_X
+        if self.client.id == 2:
+            pos = FIRST_PLAYER_X
+        self.rectangle = Rectangle(pos, 500, width, height)
 
     def update(self) -> None:
         self.process_messages(self.client.messages)

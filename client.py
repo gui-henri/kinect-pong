@@ -30,7 +30,6 @@ class Client:
             if ready_to_read:
                 for socket in ready_to_read:
                     msg = self.recieve(socket=socket)
-                    print(f'[RECIEVING] {msg}')
                     if msg:
                         self.messages.append(msg)
         print("Connection closed")
@@ -41,7 +40,6 @@ class Client:
         padd_bytes = ' '.encode(FORMAT)
         message = message_bytes + padd_bytes * (HEADER - len(message_bytes))
         assert len(message) == 128, "message is not 128 bytes long"
-        print(f"[SENDING] '{message}'")
         try:
             self.client.send(message)
         except ConnectionAbortedError:

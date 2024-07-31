@@ -167,6 +167,7 @@ class Server():
                         print("[DEBUG] Game ended by score. Winner: ", last_score.name)
                         continue
                     self.broadcast(f"{MADE_SCORE}:{last_score.name}")
+                    last_score = None
                 self.broadcast(f"{BALL}:{self.ball.x},{self.ball.y},{self.ball.dx},{self.ball.dy}")
                 for player in self.players:
                     self.broadcast(f"{Y_POSITION}:{player.name},{player.id},{player.y}")
