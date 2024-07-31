@@ -37,9 +37,9 @@ class Client:
         self.send(DISCONNECT_MESSAGE)
 
     def send(self, msg: str):
-        message_bytes = msg.encode(self.FORMAT)
-        padd_bytes = ' '.encode(self.FORMAT)
-        message = message_bytes + padd_bytes * (self.HEADER - len(message_bytes))
+        message_bytes = msg.encode(FORMAT)
+        padd_bytes = ' '.encode(FORMAT)
+        message = message_bytes + padd_bytes * (HEADER - len(message_bytes))
         assert len(message) == 128, "message is not 128 bytes long"
         print(f"[SENDING] '{message}'")
         try:
