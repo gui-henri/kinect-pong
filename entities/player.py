@@ -80,9 +80,7 @@ class Oponent(Player):
             command, value = msg
             if command == Y_POSITION:
                 name, id, y = value.split(',')
-                print(f'[RECIEVED] {id}, my id is {self.client.id}')
-                if id != self.client.id:
-                    print(f'[DEBUG] {id} was set as my height')
+                if int(id) != self.client.id:
                     self.name = name
                     self.rectangle.y = int(y)
                 messages.remove(msg)
