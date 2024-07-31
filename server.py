@@ -41,10 +41,15 @@ class Ball():
             player_x = FIRST_PLAYER_X + player.width if player.id == 1 else SECOND_PLAYER_X
             ball_x = self.x - BALL_RADIUS if player.id == 1 else self.x + BALL_RADIUS
 
-            if ball_x <= player_x and self.y >= player_start_y and self.y <= player_end_y:
-                print(f"[DEBUG] Collision with {player.name}")
-                change_x = True
-                self.last_collision = player
+            if self.y >= player_start_y and self.y <= player_end_y:
+                if player.id == 1 and ball_x <= player_x:
+                    print(f"[DEBUG] Collision with {player.name}")
+                    change_x = True
+                    self.last_collision = player
+                elif player.id == 2 and ball_x >= player_x:
+                    print(f"[DEBUG] Collision with {player.name}")
+                    change_x = True
+                    self.last_collision = player
 
         if self.x >= 1280 - BALL_RADIUS:
             self.reset_position()

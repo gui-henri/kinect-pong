@@ -27,7 +27,7 @@ class Player(Entity):
 
     def update(self) -> None:
         msgs = self.client.messages
-        self.process_message(msgs)
+        self.process_messages(msgs)
 
         if self.reference_update_callback is not None:
             self.reference = self.reference_update_callback()
