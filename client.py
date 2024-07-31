@@ -26,11 +26,12 @@ class Client:
     
     def handle_recieve(self):
         while self.connected:
-            ready_to_read, _, _ = select.select([self.client], [], [], 0)
+            ready_to_read, _, _ = select.select([self.client], [], [], 3)
             if ready_to_read:
-                msg = self.recieve()
-                if msg:
-                    self.messages.append(msg)
+                for socket in ready_to_read:
+                    msg = self.recieve(socket=socket)
+                    if msg:
+                        self.messages.append(msg)
         print("Connection closed")
         self.send(DISCONNECT_MESSAGE)
 
@@ -46,16 +47,26 @@ class Client:
             self.connected = False
             print("Connection was forcefully closed by the server or the client")
 
-    def recieve(self):
+    def recieve(self, socket=None):
         try:
-            msg = self.client.recv(HEADER).decode(FORMAT)
-            if not msg:
-                return (NONE_MESSAGE, "")
-    
-            msg = msg.split(':')
-            if len(msg) == 1:
-                return (msg[0], "")
-            return (msg[0], msg[1])
+            if socket != None:
+                msg = socket.recv(HEADER).decode(FORMAT)
+                if not msg:
+                    return (NONE_MESSAGE, "")
+        
+                msg = msg.split(':')
+                if len(msg) == 1:
+                    return (msg[0], "")
+                return (msg[0], msg[1])
+            else:
+                msg = self.client.recv(HEADER).decode(FORMAT)
+                if not msg:
+                    return (NONE_MESSAGE, "")
+        
+                msg = msg.split(':')
+                if len(msg) == 1:
+                    return (msg[0], "")
+                return (msg[0], msg[1])
         except ConnectionAbortedError:
             self.connected = False
             print("Connection aborted in exceptional way")
