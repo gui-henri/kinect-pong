@@ -19,3 +19,4 @@ MADE_SCORE = "!scr"
 WIN = "!win"
 LOSE = "!lose"
 START_MESSAGE = '!start'
+ID = "!id"

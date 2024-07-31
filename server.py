@@ -115,6 +115,7 @@ class Server():
                     assert len(self.players) < 2, "Max players reached."
                     player = Player(value, conn, addr, id=len(self.players) + 1)
                     self.add_player(player)
+                    self.send_message(f"{ID}:{player.id}", player)
 
                     print(f"[NEW PLAYER] {player.name} connected.")
                     thread = threading.Thread(target=self.handle_client, args=(player,))
@@ -163,7 +164,7 @@ class Server():
                     self.broadcast(f"{MADE_SCORE}:{last_score.name}")
                 self.broadcast(f"{BALL}:{self.ball.x},{self.ball.y},{self.ball.dx},{self.ball.dy}")
                 for player in self.players:
-                    self.broadcast(f"{player.name}:{player.y}")
+                    self.broadcast(f"{Y_POSITION}:{player.name},{player.id},{player.y}")
                 now = time.time() * 1000
                 sleep_time = 1 / fps - (now - then)
                 if sleep_time > 0:

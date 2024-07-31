@@ -13,6 +13,12 @@ class Client:
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((addr, port))
         self.send(f"{PLAYER_NAME}:{name}")
+        command, value = self.recieve()
+        if command == ID:
+            self.id = int(value)
+            print(f"Connected to server with ID {self.id}")
+        else:
+            raise Exception("Invalid command recieved from server. Expected ID, but got {command}. Try login again.")
         self.messages: list[str] = []
         self.connected = True
         self.rcv = threading.Thread(target=self.handle_recieve)

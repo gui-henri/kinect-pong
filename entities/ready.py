@@ -40,7 +40,6 @@ class ReadyText(Entity):
             self.client.send(f"{READY_MESSAGE}")
     
         msgs = self.client.messages
-        print('Before start message processing: ', msgs)
         l = len(msgs)
         for i, msg in enumerate(msgs):
             if msg[0] == START_MESSAGE:
@@ -48,9 +47,8 @@ class ReadyText(Entity):
                 self.scene.manager.change_scene("game")
                 l = i + 1
         self.client.messages = msgs[l:]
-        print("after start message processing: ", self.client.messages)
 
     def draw(self) -> None:
-        draw_text(self.text, int(get_screen_width() / 2), 40, 20, WHITE)
+        draw_text(self.text, int(get_screen_width() / 2 - len(self.text) * 10), 40, 20, WHITE)
         if not self.ready:
             draw_circle(int(self.sphere.x), int(self.sphere.y), self.radius, WHITE)

@@ -1,18 +1,27 @@
+from client import Client
+from constants import BALL_RADIUS, FIRST_PLAYER_X, PLAYER_HEIGHT, PLAYER_WIDTH, SECOND_PLAYER_X
 from entities.ball import Ball
 from entities.landmark import Landmarks
-from entities.player import Player
+from entities.player import Oponent, Player
+from entity import Entity
 from gesture_recognizer import HandRecognizer
 from scene import Scene
 from webcam import WebCam
 
 class GameScene(Scene):
-    def __init__(self, model: HandRecognizer, webcam: WebCam, name: str) -> None:
+    def __init__(self, client: Client, model: HandRecognizer, webcam: WebCam, name: str) -> None:
         super().__init__("game")
-        player = Player(35, 200, speed=10, name=name)
-        ball = Ball(200, 200, 20, [player.rectangle], speed=10)
+        self.client = client
+        player = Player(self.client, PLAYER_WIDTH, PLAYER_HEIGHT, speed=10, name=name)
+        enemy = Oponent(self.client, PLAYER_WIDTH, PLAYER_HEIGHT, speed=10)
+        ball = Ball(200, 200, BALL_RADIUS, [player.rectangle, enemy.rectangle], speed=10)
         landmarks = Landmarks(model, webcam)
         player.reference_update(landmarks.get_hand)
         
         self.entities.append(ball)
         self.entities.append(landmarks)
         self.entities.append(player)
+        self.entities.append(enemy)
+
+    def get_entities(self) -> list[Entity]:
+        return self.entities

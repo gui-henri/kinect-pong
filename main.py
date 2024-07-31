@@ -30,7 +30,7 @@ def main() -> None:
     print("[KINECT PONG] Connection was successful! Starting game!")
 
     ready_scene = ReadyScene(name, client, model, webcam)
-    game_scene = GameScene(model, webcam, name)
+    game_scene = GameScene(client, model, webcam, name)
     
     scene_manager.add_scene(ready_scene)
     scene_manager.add_scene(game_scene)

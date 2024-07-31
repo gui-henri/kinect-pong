@@ -22,7 +22,7 @@ class RayLibApp:
 
     def run(self) -> None:
         while not window_should_close():
-            self.entities = self.scene_manager.get_current_scene().entities
+            self.entities = self.scene_manager.get_current_scene().get_entities()
             self.update()
             self.draw()
 

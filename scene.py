@@ -5,6 +5,9 @@ class Scene:
         self.entities: list[Entity] = []
         self.name = name
         self.manager: SceneManager | None = None
+    
+    def get_entities(self) -> list[Entity]:
+        return self.entities
 
     def change_scene(self, scene_name: str) -> None:
         self.manager.change_scene(scene_name)
