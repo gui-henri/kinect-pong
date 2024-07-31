@@ -16,7 +16,7 @@ class Game(Entity):
         self.p2_score = 0
 
     def update(self) -> None:
-        return super().update()
+        self.proccess_messages()
     
     def proccess_messages(self, messages: list[tuple[Literal['!none'], Literal['']] | tuple[str, Literal['']] | tuple[str, str] | None]):
         msgs = messages.copy()
