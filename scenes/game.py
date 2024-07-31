@@ -14,7 +14,7 @@ class GameScene(Scene):
         self.client = client
         player = Player(self.client, PLAYER_WIDTH, PLAYER_HEIGHT, speed=10, name=name)
         enemy = Oponent(self.client, PLAYER_WIDTH, PLAYER_HEIGHT, speed=10)
-        ball = Ball(200, 200, BALL_RADIUS, [player.rectangle, enemy.rectangle], speed=10)
+        ball = Ball(self.client, 200, 200, BALL_RADIUS, [player.rectangle, enemy.rectangle], speed=10)
         landmarks = Landmarks(model, webcam)
         player.reference_update(landmarks.get_hand)
         
