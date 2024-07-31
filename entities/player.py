@@ -62,6 +62,7 @@ class Player(Entity):
 class Oponent(Player):
     def __init__(self, client: Client, width: int, height: int, color: Color = WHITE, speed: int = 1, name="unknown") -> None:
         super().__init__(client, width, height, color, speed, name)
+        self.rectangle = Rectangle(SECOND_PLAYER_X if self.client.id == 1 else FIRST_PLAYER_X, 500, width, height)
 
     def update(self) -> None:
         self.process_messages(self.client.messages)
