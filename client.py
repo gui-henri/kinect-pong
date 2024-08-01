@@ -10,7 +10,6 @@ FORMAT = "utf-8"
 
 class Client:
     def __init__(self, addr: str, port: int, name: str) -> None:
-        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.addr = (addr, port)
         self.name = name
         try:
@@ -20,6 +19,7 @@ class Client:
             quit()
     
     def connect(self):
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect(self.addr)
         self.send(f"{PLAYER_NAME}:{self.name}")
         command, value = self.recieve()
