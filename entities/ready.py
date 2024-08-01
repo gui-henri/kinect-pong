@@ -46,7 +46,6 @@ class ReadyText(Entity):
                 self.text = "Both players are ready! Starting game..."
                 self.scene.manager.change_scene("game")
                 l = i + 1
-                self.ready = False
         self.client.messages = msgs[l:]
 
     def draw(self) -> None:
